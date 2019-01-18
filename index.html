@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>MyApp</title>
+    <link rel="stylesheet" href="main.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Find a national park</h1>
+
+        <form id="js-form">
+            <input type="text" name="search-keyword" id="keyword" placeholder="Enter a keyword">
+            <label for="search-keyword">Search by keyword</label>
+
+            <br><br>
+            <input type="text" name="search-user" id="state">
+            <label for="search-state">Search by state</label>
+
+            <br><br>
+            <input type="number" name="max-results" id="limit">
+            <label for="max-results">Display results</label>
+
+            <br><br>
+            <input type="submit" value="Submit">
+        </form>
+
+        <p id="js-error-message" class="error-message"></p>
+        <section id="results" class="">
+            <div>
+                <button id="btn" type="button">Change</button>
+                <img class="img1" src="https://img.sunset02.com/sites/default/files/styles/marquee_large_2x/public/image/2017/04/main/el-capitan-getty-0517.jpg?itok=vuJS4hXh">
+            </div>
+            <ul id="parks-list"></ul>
+            <ul id="park-details"></ul>
+        </section>
+    </div>
+    <script src="carousel.js"></script>
+    <script src="main.js"></script>
+</body>
+
+</html>
