@@ -1,67 +1,140 @@
 * {
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Roboto', sans-serif;
-}
-
-button,
-input[type="text"] {
-    padding: 5px;
-}
-
-button:hover {
-    cursor: pointer;
-}
-
-ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-li {
-    padding: 10px;
-}
-
-li,
-img {
-    max-width: 500px;
-}
-
-.container {
-    max-width: 600px;
-    margin: 0 auto;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 .error-message {
-    color: red;
+  color: red;
 }
 
 .hidden {
-    display: none;
+  display: none;
 }
 
-span {
-    color: green;
-}
-
-li {
-    list-style: none;
-}
-
-.away {
-    display: block;
-    position: fixed;
-    top: -100%;
-    background-color: red;
-}
-
-img {
-    width: 300px;
+ul {
+  list-style: none;
 }
 
 .red {
-    background-color: red;
+  background-color: red;
+}
+
+.container {
+  padding: 5% 10%;
+}
+
+.inner {
+  margin-bottom: 20px;
+}
+
+nav {
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 10%;
+}
+
+nav li {
+  margin-left: 30px;
+}
+
+form input, form button {
+  width: 100%;
+  display: block;
+  margin: 0 auto;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  padding: 0.4rem;
+  border: 1px solid gray;
+}
+
+form label {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+fieldset {
+  border: none;
+}
+
+.carousel {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+
+}
+
+.carousel img {
+  position: absolute;
+  max-width: 110%;
+  min-height: 100%;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+
+}
+
+.disabled {
+  position: fixed;
+  right: -20%;
+  z-index: -1;
+  visibility: hidden;
+}
+
+.indicators li {
+  display: inline-block;
+  font-size: 3rem;
+  opacity: 0.9;
+}
+
+.enabled-dot {
+  color: white;
+}
+
+.indicators {
+  display: block;
+  position: absolute;
+  z-index: 100;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+  top: 70%;
+}
+
+.carousel button {
+  background-color: rgba(0, 0, 0, 0);
+  color: rgba(255, 255, 255, 0.5);
+  position: absolute;
+  z-index: 100;
+  width: 5%;
+  min-height: 100%;
+  border: none;
+  outline: none;
+}
+
+.carousel button:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: rgba(255, 255, 255, 1);
+}
+
+.carousel button:focus {
+  border: none;
+}
+
+#next {
+  right: 0;
+}
+
+#parks-list {
+}
+
+#parks-list img{
+  width: 100%;
+}
+
+
+header {
+
 }

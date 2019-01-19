@@ -2,47 +2,57 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>MyApp</title>
-    <link rel="stylesheet" href="main.css">
-    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
-        crossorigin="anonymous"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>MyApp</title>
+  <link rel="stylesheet" href="main.css">
+  <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+    crossorigin="anonymous"></script>
 </head>
 
 <body>
-    <div class="container">
-        <h1>Find a national park</h1>
+  <nav role="navigation">
+    <div>LOGO</div>
+    <!-- <ul>
+      <a href="/index.html"><li>home</li></a>
+      <a href="/about.html"><li>about</li></a>
+      <a href="/contacts.html"><li>contacts</li></a>
+    </ul> -->
+  </nav>
 
-        <form id="js-form">
-            <input type="text" name="search-keyword" id="keyword" placeholder="Enter a keyword">
-            <label for="search-keyword">Search by keyword</label>
-
-            <br><br>
-            <input type="text" name="search-user" id="state">
-            <label for="search-state">Search by state</label>
-
-            <br><br>
-            <input type="number" name="max-results" id="limit">
-            <label for="max-results">Display results</label>
-
-            <br><br>
-            <input type="submit" value="Submit">
-        </form>
-
-        <p id="js-error-message" class="error-message"></p>
-        <section id="results" class="">
-            <div>
-                <button id="btn" type="button">Change</button>
-                <img class="img1" src="https://img.sunset02.com/sites/default/files/styles/marquee_large_2x/public/image/2017/04/main/el-capitan-getty-0517.jpg?itok=vuJS4hXh">
-            </div>
-            <ul id="parks-list"></ul>
-            <ul id="park-details"></ul>
-        </section>
+  <header role="heading" class="container">
+    <div class="inner">
+      <h1>Find a national park</h1>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+        magna aliqua.</p>
     </div>
-    <script src="carousel.js"></script>
-    <script src="main.js"></script>
+    <form id="js-form" class="inner">
+      <fieldset>
+        <input type="text" name="search-keyword" id="keyword" placeholder="Enter a keyword">
+        <!-- <label for="search-keyword">Search by keyword</label> -->
+
+        <input type="text" name="search-user" id="state" placeholder="Enter a state">
+        <!-- <label for="search-state">Search by state</label> -->
+
+        <input type="number" name="max-results" id="limit" placeholder="Show results">
+        <!-- <label for="max-results">Display results</label> -->
+
+        <button type="submit" value="Submit">Sumbit</button>
+      </fieldset>
+    </form>
+  </header>
+
+  <main role="main" class="container">
+    <section id="results">
+      <p id="js-error-message" class="error-message"></p>
+      <ul id="parks-list">
+        
+      </ul>
+    </section>
+  </main>
+  <script src="carousel.js"></script>
+  <script src="main.js"></script>
 </body>
 
 </html>
