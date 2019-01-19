@@ -1,6 +1,5 @@
-function parkDetails(parkCode) {
+function getParkDetails(parkCode) {
   $(`#${parkCode}`).on('click', event => {
-    $('#parks-list').addClass('away')
     callNps({
       parkCode
     })
@@ -13,37 +12,33 @@ function renderSection(obj) {
   const images = [];
   if (obj.data.length > 1) {
     obj.data.forEach(park => {
-      $('#parks-list').append(`
-                <li id="park-${park.parkCode}" class="inner">
-                    <h3>${park.fullName}</h3>
-                    <input type="checkbox">
-                    <p>${park.description.substring(0, 100) + "..."}</p>
-                    <img src="${park.images[0].url}" alt="${park.name}"> 
-                    <button type="checkbox" id="${park.parkCode}">View more</button>
-                </li>
-                `)
-      parkDetails(park.parkCode);
+      
+      // generate list
+      genParksList(park)
+      getParkDetails(park.parkCode)
     })
   } else if (obj.data.length === 1) {
+    hideForm();
     const park = obj.data[0];
     images.push(...park.images);
-    createCarousel(images);
-    $('#parks-list').append(`
-            <li>
-                <h3>${park.fullName}</h3>
-                <input type="checkbox">
-                <p>${park.description}</p>
-                <p>${park.directionsInfo}</p>
-            </li> 
-        `)
+
+    getLatLng(park.fullName)
+
+
+    // generate all elements
+    genCarousel(images);
+    genParkInfo(park)
+    genMap();
+
   } else {
     $('#parks-list').append(`
-            <p>Not found</p>
-        `)
+      <p>Not found</p>
+    `)
   }
 
-  $('#results').removeClass('hidden')
-  $('#parks-list').removeClass('away')
+  setTimeout(function () {
+    $('#results').removeClass('hidden')
+  }, 1000)
 
 }
 
@@ -66,14 +61,15 @@ function callNps(args) {
     limit: 3,
     start: 0,
     parkCode: '',
-    fields: 'images,contacts'
+    fields: 'images,contacts,entranceFees,entrancePasses'
   }
 
   args = Object.assign(params, args)
 
   let endpoint = npsUrl + "?" + generateParams(params)
   console.log(endpoint);
-
+  console.log(params.limit);
+  
   fetch(endpoint)
     .then(res => {
       if (res.ok) {
@@ -85,8 +81,61 @@ function callNps(args) {
     .catch(err => console.log(err));
 }
 
+
+
+
+async function getLatLng(name) {
+  const api2 = 'AIzaSyCBAsHTwIuM21X08GF99aMvf7y0kuiOZ90';
+  const baseUrl2 = 'https://maps.googleapis.com/maps/api/geocode/json';
+
+  const params2 = {
+    key: api2,
+  }
+  const url2 = baseUrl2 + "?" + generateParams(params2)
+
+  let response2 = await fetch(url2 + "&address=" + name);
+  let json2 = await response2.json();
+
+  console.log(json2.results[0].geometry.location);
+  const loc = json2.results[0].geometry.location
+
+  initMap(loc)
+  $('#map').removeClass('hidden')
+}
+
+function initMap(location) {
+  const map = new google.maps.Map(document.getElementById('map'), {
+    center: location,
+    zoom: 12,
+    disableDefaultUI: true
+    // mapTypeControl: true,
+    // mapTypeControlOptions: {
+    //   style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
+    //   mapTypeIds: ['roadmap', 'terrain']
+    // }
+  });
+
+  const marker = new google.maps.Marker({
+    position: location,
+    map: map
+  });
+
+}
+
+function hideForm() {
+  $('header').toggleClass('collapse-form')
+}
+
+$('#hide-form').change(function () {
+  hideForm()
+})
+
+
 $('#js-form').on('submit', event => {
   event.preventDefault();
+  $('.wrapper').empty().addClass('hidden');
+  $('.carousel').remove();
+  
   let keyword = $('#keyword')
   let state = $('#state')
   let limit = $('#limit')
@@ -97,6 +146,6 @@ $('#js-form').on('submit', event => {
   if (state.val()) args.stateCode = state.val()
   if (limit.val()) args.limit = limit.val()
 
+
   callNps(args)
-  $('#parks-list').removeClass('away')
 })

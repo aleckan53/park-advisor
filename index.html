@@ -13,7 +13,8 @@
 
 <body>
   <nav role="navigation">
-    <div>LOGO</div>
+    <div></div>
+    <input id="hide-form" type="checkbox">
     <!-- <ul>
       <a href="/index.html"><li>home</li></a>
       <a href="/about.html"><li>about</li></a>
@@ -44,15 +45,16 @@
   </header>
 
   <main role="main" class="container">
-    <section id="results">
+    <section id="results" class="hidden">
       <p id="js-error-message" class="error-message"></p>
-      <ul id="parks-list">
-        
-      </ul>
+      <div class="inner">
+        <ul id="parks-list"></ul>
+      </div>
     </section>
   </main>
-  <script src="carousel.js"></script>
+  <script src="elements.js"></script>
   <script src="main.js"></script>
+  <script id="map-script" async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBAsHTwIuM21X08GF99aMvf7y0kuiOZ90"></script>
 </body>
 
 </html>
