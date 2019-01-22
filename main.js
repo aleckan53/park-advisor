@@ -1,44 +1,44 @@
-function getParkDetails(parkCode) {
+function clearSections() {
+  $('#description').remove();
+  $('#map-section').remove();
+  $('#fees-section').remove();
+  $('#weather-section').remove();
+}
+
+function watchParkDetails(parkCode) {
   $(`#${parkCode}`).on('click', event => {
-    callNps({
-      parkCode
-    })
+    callNps({parkCode}, "parks");
   })
 }
 
 function renderSection(obj) {
-  console.log(obj);
-  $('#parks-list').empty();
+  window.scrollTo(1,1)
   const images = [];
   if (obj.data.length > 1) {
     obj.data.forEach(park => {
-      
-      // generate list
-      genParksList(park)
-      getParkDetails(park.parkCode)
+      let randomIndex = Math.floor(Math.random() * park.images.length)
+      genParksList(park, randomIndex)
+      watchParkDetails(park.parkCode)
+
     })
   } else if (obj.data.length === 1) {
-    hideForm();
+    $('#check-1').prop('checked', false)
+    $('#hide-form').trigger('change')
     const park = obj.data[0];
     images.push(...park.images);
-
+    $('#results').addClass("collapse")
+    $('header').addClass("collapse-form")
+    clearSections()
     getLatLng(park.fullName)
-
-
-    // generate all elements
-    genCarousel(images);
-    genParkInfo(park)
-    genMap();
-
+    genHtml(images, park);
+    
   } else {
     $('#parks-list').append(`
       <p>Not found</p>
     `)
   }
+  wrapperCollapse()
 
-  setTimeout(function () {
-    $('#results').removeClass('hidden')
-  }, 1000)
 
 }
 
@@ -51,11 +51,11 @@ function generateParams(obj) {
     .join("&")
 }
 
-function callNps(args) {
-  const npsUrl = 'https://api.nps.gov/api/v1/parks';
-
+function callNps(args, info) {
+  const npsUrl = `https://api.nps.gov/api/v1/${info}`;
+  const api = 'V6am0sq9z5Ryh4HuzfxaSDqWaicvMH1aL9kjh9sC';
   const params = {
-    api_key: 'V6am0sq9z5Ryh4HuzfxaSDqWaicvMH1aL9kjh9sC',
+    api_key: api,
     q: '',
     stateCode: '',
     limit: 3,
@@ -63,12 +63,18 @@ function callNps(args) {
     parkCode: '',
     fields: 'images,contacts,entranceFees,entrancePasses'
   }
+  
 
   args = Object.assign(params, args)
 
-  let endpoint = npsUrl + "?" + generateParams(params)
+  let endpoint = "";
+  if (info === "parks"){
+    endpoint = npsUrl + "?" + generateParams(params);
+  } else if (info === "alerts"){
+    endpoint = npsUrl + "?api_key="+api+"&parkCode="+args.parkCode;
+
+  }
   console.log(endpoint);
-  console.log(params.limit);
   
   fetch(endpoint)
     .then(res => {
@@ -77,27 +83,31 @@ function callNps(args) {
       }
       throw new Error(res.statusText)
     })
-    .then(res => renderSection(res))
+    .then(res => {
+      if (info === "parks"){
+        renderSection(res);
+      } else if (info === "alerts") {
+        genAlerts(res)
+      }
+    })
     .catch(err => console.log(err));
 }
 
 
 
-
 async function getLatLng(name) {
-  const api2 = 'AIzaSyCBAsHTwIuM21X08GF99aMvf7y0kuiOZ90';
-  const baseUrl2 = 'https://maps.googleapis.com/maps/api/geocode/json';
+  const api = 'AIzaSyCBAsHTwIuM21X08GF99aMvf7y0kuiOZ90';
+  const baseUrl = 'https://maps.googleapis.com/maps/api/geocode/json';
 
-  const params2 = {
-    key: api2,
+  const params = {
+    key: api
   }
-  const url2 = baseUrl2 + "?" + generateParams(params2)
+  const url = baseUrl + "?" + generateParams(params)
 
-  let response2 = await fetch(url2 + "&address=" + name);
-  let json2 = await response2.json();
+  let response = await fetch(url + "&address=" + name);
+  let json = await response.json();
 
-  console.log(json2.results[0].geometry.location);
-  const loc = json2.results[0].geometry.location
+  const loc = json.results[0].geometry.location
 
   initMap(loc)
   $('#map').removeClass('hidden')
@@ -106,46 +116,103 @@ async function getLatLng(name) {
 function initMap(location) {
   const map = new google.maps.Map(document.getElementById('map'), {
     center: location,
-    zoom: 12,
+    zoom: 10,
     disableDefaultUI: true
-    // mapTypeControl: true,
-    // mapTypeControlOptions: {
-    //   style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
-    //   mapTypeIds: ['roadmap', 'terrain']
-    // }
   });
 
   const marker = new google.maps.Marker({
     position: location,
     map: map
   });
-
 }
 
-function hideForm() {
-  $('header').toggleClass('collapse-form')
-}
 
 $('#hide-form').change(function () {
-  hideForm()
+  $('header').toggleClass('collapse-form')
 })
-
 
 $('#js-form').on('submit', event => {
   event.preventDefault();
-  $('.wrapper').empty().addClass('hidden');
-  $('.carousel').remove();
   
-  let keyword = $('#keyword')
-  let state = $('#state')
-  let limit = $('#limit')
-  if (!keyword.val().trim().length) keyword.val('')
-  if (!state.val().trim().length) state.val('');
+  $('#results').removeClass('hidden').removeClass('collapse')
+  $('#parks-list').empty();
+  clearSections();
   const args = {}
+  let keyword = $('#search-park')
+  let state = $('#search-state')
+
   if (keyword.val()) args.q = keyword.val()
   if (state.val()) args.stateCode = state.val()
-  if (limit.val()) args.limit = limit.val()
 
-
-  callNps(args)
+  callNps(args, "parks")
 })
+
+
+$('.wrapper-switch-1').on('click', function() {
+  $(this).closest('.wrapper').toggleClass('collapse')
+})
+// !CORS
+// async function getWeather (coordinates) {
+//   // accuweather
+//   // 1 get location code to request weather info
+//   // 2 get weather by location code
+//   const codeUrl = "http://dataservice.accuweather.com/locations/v1/cities/geoposition/search"
+//   const api = "Zg63fNEFPoFyNtWNrygJYBCTbaGwbAdr";
+//   const weatherUrl = "http://dataservice.accuweather.com/forecasts/v1/daily/5day/"
+//   const latlng = Object.values(coordinates).join(",")
+
+//   const url = `${codeUrl}?apikey=${api}&q=${latlng}`
+//   const url2 = `${weatherUrl}?apikey=${api}`
+
+//   let res = await fetch(url);
+//   let json = await res.json();
+//   console.log(json);
+
+//   let res2 = await fetch(url2 + json.Key)
+//   let json2 = await res2.json();
+
+//   console.log(json2);
+
+
+// }
+
+// async function getReviews (name) {
+//   const api = 'AIzaSyCBAsHTwIuM21X08GF99aMvf7y0kuiOZ90';
+//   const baseUrl = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?";
+//   const params = {
+//     key: api,
+//     input: name,
+//     inputtype: 'textquery'
+//   }
+
+//   let res = await fetch(baseUrl+generateParams(params), {dataType: 'jsonp'});
+//   let json = await res.json();
+
+//   const baseUrl2 = 'https://maps.googleapis.com/maps/api/place/details/json?';
+//   const params2 = {
+//     key: api,
+//     fields: 'reviews',
+//     placeid: json.candidates[0].place_id
+//   }
+
+//   let res2 = await fetch(baseUrl2+generateParams(params2));
+//   let json2 = await res2.json();
+
+//   console.log(json2);
+  
+// }
+
+// $('input[type="radio"]').on('change', function () {
+
+//   if (this.value === "q") {
+//     $('#search-state').addClass('hidden')
+//     $('#search-park').removeClass('hidden')
+
+//   } else if (this.value === "state") {
+//     $('#search-park').addClass('hidden')
+//     $('#search-state').removeClass('hidden')
+
+//   }
+// })
+
+
