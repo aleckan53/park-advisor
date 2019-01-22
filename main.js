@@ -12,7 +12,6 @@ function watchParkDetails(parkCode) {
 }
 
 function renderSection(obj) {
-  window.scrollTo(1,1)
   const images = [];
   if (obj.data.length > 1) {
     obj.data.forEach(park => {
@@ -22,13 +21,18 @@ function renderSection(obj) {
 
     })
   } else if (obj.data.length === 1) {
+
     $('#check-1').prop('checked', false)
-    $('#hide-form').trigger('change')
+    $('#hide-form').trigger('change').prop('checked', false)
+
     const park = obj.data[0];
     images.push(...park.images);
+
     $('#results').addClass("collapse")
     $('header').addClass("collapse-form")
+
     clearSections()
+
     getLatLng(park.fullName)
     genHtml(images, park);
     
@@ -38,8 +42,6 @@ function renderSection(obj) {
     `)
   }
   wrapperCollapse()
-
-
 }
 
 
@@ -58,10 +60,10 @@ function callNps(args, info) {
     api_key: api,
     q: '',
     stateCode: '',
-    limit: 3,
+    limit: 5,
     start: 0,
     parkCode: '',
-    fields: 'images,contacts,entranceFees,entrancePasses'
+    fields: 'images,contacts,entranceFees'
   }
   
 
@@ -72,7 +74,6 @@ function callNps(args, info) {
     endpoint = npsUrl + "?" + generateParams(params);
   } else if (info === "alerts"){
     endpoint = npsUrl + "?api_key="+api+"&parkCode="+args.parkCode;
-
   }
   console.log(endpoint);
   
@@ -87,7 +88,7 @@ function callNps(args, info) {
       if (info === "parks"){
         renderSection(res);
       } else if (info === "alerts") {
-        genAlerts(res)
+        console.log(res);
       }
     })
     .catch(err => console.log(err));
@@ -131,22 +132,21 @@ $('#hide-form').change(function () {
   $('header').toggleClass('collapse-form')
 })
 
-$('#js-form').on('submit', event => {
+$('form').on('submit', event => {
   event.preventDefault();
   
   $('#results').removeClass('hidden').removeClass('collapse')
   $('#parks-list').empty();
   clearSections();
+
   const args = {}
   let keyword = $('#search-park')
-  let state = $('#search-state')
+  let maxResults = $('#max-results')
 
   if (keyword.val()) args.q = keyword.val()
-  if (state.val()) args.stateCode = state.val()
-
+  if (maxResults.val()) args.limit = maxResults.val()
   callNps(args, "parks")
 })
-
 
 $('.wrapper-switch-1').on('click', function() {
   $(this).closest('.wrapper').toggleClass('collapse')

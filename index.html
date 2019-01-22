@@ -30,13 +30,21 @@
   </nav>
 
   <header role="heading" class="padding-5-10">
-    <form id="js-form" class="inner">
+    <form>
       <fieldset>
         <!-- <input type="radio" name="a" value="q" checked>
         <label>Search by park name</label>
         <input type="radio" name="a" value="state">
         <label>Search by state code</label> -->
-        <input type="text" id="search-park" placeholder="Enter a park name" required>
+        <div class="search-params">
+          <input type="text" id="search-park" placeholder="Enter a park name" required>
+          <select id="max-results">
+            <option disabled>Max results</option>
+            <option value="3">3</option>
+            <option value="5">5</option>
+            <option value="10">10</option>
+          </select>
+        </div>
         <!-- <select id="search-state" class="hidden">
             <option value="">--Please select state--</option>
             <option value="AL">Alabama</option>
@@ -91,14 +99,15 @@
             <option value="WI">Wisconsin</option>
             <option value="WY">Wyoming</option>
           </select>	 -->
-        <button type="submit" value="Submit">Sumbit</button>
+        <button type="submit" value="Submit">Submit</button>
       </fieldset>
     </form>
-    <div class="inner">
+    <header role="banner">
+      <h1>National park search</h1>
       <p id="app-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
         ut labore et dolore
         magna aliqua.</p>
-    </div>
+    </header>
 
   </header>
 
@@ -106,8 +115,8 @@
     <p id="js-error-message" class="error-message"></p>
 
     <section id="results" class="wrapper hidden">
-      <div class="wrapper-top padding-5-10">
-        <label>Search list</label>
+      <div class="wrapper-top padding-0-10">
+        <label>Results list</label>
         <div class="check">
           <input class="wrapper-switch-1" type="checkbox" id="check-1" checked>
           <label for="check-1">

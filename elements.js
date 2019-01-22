@@ -5,10 +5,12 @@ function wrapperCollapse () {
 }
 
 function genHtml(img, park) {
+  window.scrollTo(1,1)
+
   const html = [];
   html.push(
     `<section id="description" class="wrapper">
-      <div class="wrapper-top padding-5-10" checked>
+      <div class="wrapper-top padding-0-10" checked>
         <label>Description</label>
         <div class="check">
           <input class="wrapper-switch" type="checkbox" id="check-2" checked>
@@ -71,7 +73,7 @@ function genCarousel(img) {
 function genParkInfo(park) {
   return `
     <div id="park-info" class="padding-5-10">
-      <h3>${park.fullName}</h3>
+      <h3>${park.fullName} ${park.states}</h3>
       <p>${park.description}</p>
     </div>
     `
@@ -80,7 +82,7 @@ function genParkInfo(park) {
 function genMap(park) {
   return `
     <section id="map-section" class="wrapper collapse">
-      <div class="wrapper-top padding-5-10" >
+      <div class="wrapper-top padding-0-10" >
         <label>Directions</label>
         <div class="check">
           <input class="wrapper-switch" type="checkbox" id="check-3">
@@ -103,8 +105,8 @@ function genFeesInfo(park) {
   } else {
     html.push(`
     <section id="fees-section" class="wrapper collapse">
-      <div class="wrapper-top padding-5-10">
-        <label>Pricing</label>
+      <div class="wrapper-top padding-0-10">
+        <label>Entrance fees</label>
         <div class="check">
           <input class="wrapper-switch" type="checkbox" id="check-4">
           <label for="check-4">
@@ -142,7 +144,7 @@ function genFeesInfo(park) {
 function genWeather(park) {
   return `
     <section id="weather-section" class="wrapper collapse">
-      <div class="wrapper-top padding-5-10">
+      <div class="wrapper-top padding-0-10">
         <label>Weather</label>
         <div class="check">
           <input class="wrapper-switch" type="checkbox" id="check-5">
@@ -226,7 +228,7 @@ function carouselControls(length) {
 
   setInterval(function () {
     $('#next').trigger('click')
-  }, 5000)
+  }, 7000)
 
 }
 
@@ -235,7 +237,7 @@ function carouselControls(length) {
 function genParksList(park, randomIndex) {
   $('#parks-list').append(`
   <li id="park-${park.parkCode}" class="inner padding-5-10">
-    <h3>${park.fullName}</h3>
+    <h3>${park.fullName} ${park.states}</h3>
     <p>${park.description.substring(0, 100) + "..."}</p>
     <img src="${park.images[randomIndex].url}" alt="${park.name}"> 
     <button type="button" id="${park.parkCode}">View more</button>
