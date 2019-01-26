@@ -122,12 +122,8 @@ fieldset {
   min-width: 110%;
   max-width: 115%;
 }
-/* 
-#carousel {
-  background: url(assets/loading.gif) no-repeat center;
-}
- */
- #carousel button {
+
+#carousel button {
   background-color: rgba(0, 0, 0, 0);
   color: rgba(255, 255, 255, 0.5);
   position: absolute;
@@ -378,6 +374,7 @@ form,
   position: relative;
   overflow: hidden;
   margin-top: 1em;
+  cursor: pointer;
 }
 
 
@@ -544,8 +541,6 @@ form,
   #slideshow {
     height: 25vw;
   }
-
-
 }
 
 @media (min-width: 1600px) {
