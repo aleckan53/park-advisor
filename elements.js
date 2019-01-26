@@ -1,24 +1,19 @@
-function wrapperCollapse () {
-  $('.wrapper-switch').on('click', function() {
-    $(this).closest('.wrapper').toggleClass('collapse')
-  })
-}
-
+// gen main html
 function genHtml(img, park) {
-  window.scrollTo(1,1)
-
   const html = [];
   html.push(
-    `<section id="description" class="wrapper">
-      <div class="wrapper-top padding-0-10" checked>
+    `<section id="description">
+      <div class="section-head" checked>
         <label>Description</label>
-        <div class="check">
-          <input class="wrapper-switch" type="checkbox" id="check-2" checked>
+        <div class="switch">
+          <input type="checkbox" id="check-2">
           <label for="check-2">
         </div>
       </div>
-      ${genCarousel(img)}
-      ${genParkInfo(park)}
+      <div class="section-body">
+        ${genCarousel(img)}
+        ${genParkInfo(park)}
+      </div>
     </section>
     `,
     genMap(park),
@@ -26,11 +21,10 @@ function genHtml(img, park) {
     genWeather(park),
   );
 
-  // append all
-  $('main').append(html)
-
-  // run controls
-  carouselControls(img.length)
+  $('main').append(html);
+  console.log(html.join());
+  
+  carouselControls(img.length);
 }
 
 function genCarousel(img) {
@@ -40,39 +34,37 @@ function genCarousel(img) {
     console.log("No images");
   } else {
     html.push(`
-    <div id="carousel" class="carousel">
+    <div id="carousel">
         <ul class="indicators">
     `)
   }
 
-  img.forEach((item, index) => {   // push indicators
+  img.forEach((item, index) => { // push indicators
     html.push(`
     <li id="dot-${index}">.</li>
-  `)
-  })
+  `);
+  });
 
-  html.push(   // push prev/next btns
+  html.push( // push prev/next btns
     `</ul>
     <button id="prev" type="button"><</button> 
     <button id="next" type="button">></button>`
-    )
+  );
 
-  img.forEach((item, index) => {   // push imgs
+  img.forEach((item, index) => { // push imgs
     html.push(`
     <img id ="img-${index}" class="disabled" src="${item.url}" alt="${item.altText}">
-  `)
-  })
+  `);
+  });
 
-  html.push(   // push closing tag
-    `</div>`
-  )
-
-  return html.join('')
+  html.push(`</div>`);  // push closing tag
+  
+  return html.join('');
 }
 
 function genParkInfo(park) {
   return `
-    <div id="park-info" class="padding-5-10">
+    <div id="park-info">
       <h3>${park.fullName} ${park.states}</h3>
       <p>${park.description}</p>
     </div>
@@ -81,16 +73,18 @@ function genParkInfo(park) {
 
 function genMap(park) {
   return `
-    <section id="map-section" class="wrapper collapse">
-      <div class="wrapper-top padding-0-10" >
+    <section id="map-section">
+      <div class="section-head">
         <label>Directions</label>
-        <div class="check">
-          <input class="wrapper-switch" type="checkbox" id="check-3">
+        <div class="switch">
+          <input type="checkbox" id="check-3">
           <label for="check-3">
         </div>
       </div>
-      <div id="map"></div>
-      <p class="padding-5-10">${park.directionsInfo}</p>
+      <div class="section-body hidden">
+        <div id="map"></div>
+        <p>${park.directionsInfo}</p>
+      </div>
     </section>
   `
 }
@@ -101,146 +95,158 @@ function genFeesInfo(park) {
   if (!park.entranceFees) {
     html.push(`
       <p>No entrance fee</p>
-    `)
+    `);
   } else {
     html.push(`
-    <section id="fees-section" class="wrapper collapse">
-      <div class="wrapper-top padding-0-10">
+    <section id="fees-section">
+      <div class="section-head">
         <label>Entrance fees</label>
-        <div class="check">
-          <input class="wrapper-switch" type="checkbox" id="check-4">
+        <div class="switch">
+          <input type="checkbox" id="check-4">
           <label for="check-4">
         </div>
       </div>
-      <table id="fees-table" class="padding-5-10">
-        <thead>
-          <td>Title</td>
-          <td>Description</td>
-          <td>Cost</td>
-        </thead>
-        <tbody>
-  `)
+      <div class="section-body hidden">
+        <table id="fees-table">
+          <thead>
+            <td>Title</td>
+            <td>Description</td>
+            <td>Cost</td>
+          </thead>
+          <tbody>
+  `);
   }
 
   park.entranceFees.forEach(fee => {
     html.push(`
-        <tr>
-          <td>${fee.title}</td>
-          <td>${fee.description}</td>
-          <td>$${fee.cost}</td>
-        </tr>
-      `)
-  })
+            <tr>
+              <td>${fee.title}</td>
+              <td>${fee.description}</td>
+              <td>$${fee.cost}</td>
+            </tr>
+    `);
+  });
 
   html.push(`
-    </tbody>
-      </table>
+          </tbody>
+        </table>
+      </div>
     </section>
-  `)
+  `);
 
-  return html.join('')
+  return html.join('');
 }
 
 function genWeather(park) {
   return `
-    <section id="weather-section" class="wrapper collapse">
-      <div class="wrapper-top padding-0-10">
+    <section id="weather-section">
+      <div class="section-head">
         <label>Weather</label>
-        <div class="check">
-          <input class="wrapper-switch" type="checkbox" id="check-5">
+        <div class="switch">
+          <input type="checkbox" id="check-5">
           <label for="check-5">
         </div>
       </div>
-      <div class="padding-5-10">
-      <img src="http://icons.iconarchive.com/icons/papirus-team/papirus-apps/256/weather-icon.png" alt="weather icon">
+      <div class="section-body hidden">
+        <img src="assets/${Math.floor(Math.random()*3)}.png" alt="weather icon">
         <p>${park.weatherInfo}</p>
       </div>
     </section>
   `
 }
 
-function genAlerts (obj) {
-  const html = [
-    `<section id="alerts" class="wrapper collapse">
-    <div class="wrapper-top padding-5-10">
-    <label>Alerts</label>
-        <div class="check">
-          <input class="wrapper-switch" type="checkbox" id="check-6">
-          <label for="check-6">
-        </div>
-    </div>
-    <table class="padding-5-10">`
-  ];
-
-  obj.data.forEach(alert => {
-    html.push(`
-    <tr>
-      <td>ICON</td>
-      <td>
-        <p>${alert.title}</p>
-        <p>${alert.description}</p>
-        <p>${alert.url}</p>
-      </td>
-    </tr>`
-    )
-  })
-
-  html.push(`
-    </table>
-    </section>
-  `)
-
-  $('main').append(html)
-}
-
 function carouselControls(length) {
+  
   let index = 0;
+  const rotate = function(){
+    $('#next').trigger('click');
+  }
+  let rotateI = setInterval(rotate, 7000);
 
-  $(`#img-${index}`).removeClass('disabled').addClass('enabled')
-  $(`#dot-${index}`).addClass(`enabled-dot`)
+  $(`#img-${index}`).toggleClass('disabled');
+  $(`#dot-${index}`).toggleClass(`enabled-dot`);
 
   function switchImg() {
     $('#next').on('click', function () {
-      $(`#img-${index}`).removeClass('enabled').addClass('disabled')
-      $(`#dot-${index}`).removeClass(`enabled-dot`)
-      incIndex()
-      $(`#img-${index}`).removeClass('disabled').addClass('enabled')
-      $(`#dot-${index}`).addClass(`enabled-dot`)
-    })
+      clearInterval(rotateI);
+      rotateI = setInterval(rotate, 7000);
+      $(`#img-${index}`).toggleClass('disabled');
+      $(`#dot-${index}`).toggleClass(`enabled-dot`);
+      incIndex();
+      $(`#img-${index}`).toggleClass('disabled');
+      $(`#dot-${index}`).toggleClass(`enabled-dot`);
+    });
     $('#prev').on('click', function () {
-      $(`#img-${index}`).removeClass('enabled').addClass('disabled')
-      $(`#dot-${index}`).removeClass(`enabled-dot`)
-      decrIndex()
-      $(`#img-${index}`).removeClass('disabled').addClass('enabled')
-      $(`#dot-${index}`).addClass(`enabled-dot`)
+      clearInterval(rotateI);
+      rotateI = setInterval(rotate, 7000);
 
-    })
+      $(`#img-${index}`).toggleClass('disabled');
+      $(`#dot-${index}`).toggleClass(`enabled-dot`);
+      decrIndex();
+      $(`#img-${index}`).toggleClass('disabled');
+      $(`#dot-${index}`).toggleClass(`enabled-dot`);
+
+    });
   }
 
   function incIndex() {
-    return index < length - 1 ? index++ : index = 0
+    return index < length - 1 ? index++ : index = 0;
   }
 
   function decrIndex() {
-    return index === 0 ? index = length - 1 : index--
+    return index === 0 ? index = length - 1 : index--;
   }
-  switchImg()
+  switchImg();
 
-  setInterval(function () {
-    $('#next').trigger('click')
-  }, 7000)
 
+  $('#carousel').on('swiped-left', function (e) {
+    $('#next').trigger('click');
+  });
+
+  $('#carousel').on('swiped-right', function (e) {
+    $('#prev').trigger('click');
+  });
 }
 
+function genParksList(data) {
+  const html = [
+    `<section id="results">
+      <div class="section-head">
+        <label>Results list</label>
+        <div class="switch hidden">
+          <input type="checkbox" id="check-1">
+          <label for="check-1">
+        </div>
+      </div>
+      <div class="section-body">
+        <ul id="parks-list" role="list">`
+  ];
 
+  data.forEach(park => {
+    let randomIndex = Math.floor(Math.random() * park.images.length)
+    html.push(`
+    <li id="park-${park.parkCode}" role="listitem">
+      <h3>${park.fullName} ${park.states}</h3>
+      <div class="img-container">
+        <img src="${park.images[randomIndex].url}" alt="${park.name}">
+      </div>
+      <button type="button" id="${park.parkCode}">View more</button>
+    </li>
+    `);
+  });
 
-function genParksList(park, randomIndex) {
-  $('#parks-list').append(`
-  <li id="park-${park.parkCode}" class="inner padding-5-10">
-    <h3>${park.fullName} ${park.states}</h3>
-    <p>${park.description.substring(0, 100) + "..."}</p>
-    <img src="${park.images[randomIndex].url}" alt="${park.name}"> 
-    <button type="button" id="${park.parkCode}">View more</button>
-  </li>
-  `)
+  html.push(`
+        </ul>
+      </div>
+    </section>
+  `);
+
+  $('main').append(html.join(''));
+}
+
+function genErrMsg() {
+  $('main').prepend(`
+    <p class="error">Not found. Please check your spelling and try again.</p>
+  `);
+  console.log("Not found. Please check your spelling and try again.");
 }

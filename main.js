@@ -1,123 +1,108 @@
-function clearSections() {
-  $('#description').remove();
-  $('#map-section').remove();
-  $('#fees-section').remove();
-  $('#weather-section').remove();
-}
+// mobile swipes
+!function(t,e){"use strict";"initCustomEvent"in e.createEvent("CustomEvent")&&(t.CustomEvent=function(t,n){n=n||{bubbles:!1,cancelable:!1,detail:void 0};var u=e.createEvent("CustomEvent");return u.initCustomEvent(t,n.bubbles,n.cancelable,n.detail),u},t.CustomEvent.prototype=t.Event.prototype),e.addEventListener("touchstart",function(t){if("true"===t.target.getAttribute("data-swipe-ignore"))return;s=t.target,l=Date.now(),n=t.touches[0].clientX,u=t.touches[0].clientY,a=0,i=0},!1),e.addEventListener("touchmove",function(t){if(!n||!u)return;var e=t.touches[0].clientX,l=t.touches[0].clientY;a=n-e,i=u-l},!1),e.addEventListener("touchend",function(t){if(s!==t.target)return;var e=parseInt(s.getAttribute("data-swipe-threshold")||"20",10),o=parseInt(s.getAttribute("data-swipe-timeout")||"500",10),r=Date.now()-l,c="";Math.abs(a)>Math.abs(i)?Math.abs(a)>e&&r<o&&(c=a>0?"swiped-left":"swiped-right"):Math.abs(i)>e&&r<o&&(c=i>0?"swiped-up":"swiped-down");""!==c&&s.dispatchEvent(new CustomEvent(c,{bubbles:!0,cancelable:!0}));n=null,u=null,l=null},!1);var n=null,u=null,a=null,i=null,l=null,s=null}(window,document);
 
-function watchParkDetails(parkCode) {
-  $(`#${parkCode}`).on('click', event => {
-    callNps({parkCode}, "parks");
-  })
-}
+$('.logo').on('click', function(){location.reload()});
 
 function renderSection(obj) {
+  $('.error').remove();
+  $('main').empty();
+  $('#app-description').remove();
+  $('#quick-search').remove();
+
   const images = [];
+  // renders list of parks
   if (obj.data.length > 1) {
-    obj.data.forEach(park => {
-      let randomIndex = Math.floor(Math.random() * park.images.length)
-      genParksList(park, randomIndex)
-      watchParkDetails(park.parkCode)
-
-    })
+    genParksList(obj.data);
+    $('#results button').on('click', e => {
+      callNps({parkCode: e.target.id}, "parks");  
+    });
+  // renders one park
   } else if (obj.data.length === 1) {
-
-    $('#check-1').prop('checked', false)
-    $('#hide-form').trigger('change').prop('checked', false)
-
     const park = obj.data[0];
     images.push(...park.images);
+    window.scrollTo(1,130);
+    $('#results .switch').removeClass('hidden');
 
-    $('#results').addClass("collapse")
-    $('header').addClass("collapse-form")
-
-    clearSections()
-
-    getLatLng(park.fullName)
+    getLatLng(park.fullName);
     genHtml(images, park);
-    
+
+    $('#check-1').trigger('click');
+    $('#check-3').trigger('click');
+    $('#check-4').trigger('click');
+    $('#check-5').trigger('click');
+  // err if not found
   } else {
-    $('#parks-list').append(`
-      <p>Not found</p>
-    `)
+    genErrMsg();
   }
-  wrapperCollapse()
-}
+  // hide sections
+  $('.switch input[type="checkbox"]').off().on('change', e => {
+    let body = e.target.parentElement.parentElement.nextElementSibling;
+    $(body).toggleClass('hidden');
+  });    
+}   
 
-
+// params obj to valid api params
 function generateParams(obj) {
   return Object.keys(obj)
     .map(key =>
       `${encodeURI(key)}=${encodeURI(obj[key])}`
     )
-    .join("&")
+    .join("&");
 }
 
+// request park data
 function callNps(args, info) {
   const npsUrl = `https://api.nps.gov/api/v1/${info}`;
   const api = 'V6am0sq9z5Ryh4HuzfxaSDqWaicvMH1aL9kjh9sC';
   const params = {
-    api_key: api,
     q: '',
     stateCode: '',
-    limit: 5,
+    limit: 4,
     start: 0,
     parkCode: '',
     fields: 'images,contacts,entranceFees'
-  }
+  };
   
-
-  args = Object.assign(params, args)
-
-  let endpoint = "";
-  if (info === "parks"){
-    endpoint = npsUrl + "?" + generateParams(params);
-  } else if (info === "alerts"){
-    endpoint = npsUrl + "?api_key="+api+"&parkCode="+args.parkCode;
-  }
-  console.log(endpoint);
+  args = Object.assign(params, args);
+  let endpoint = npsUrl + "?" + generateParams(params);
   
-  fetch(endpoint)
+  fetch(endpoint, {api_key: api})
     .then(res => {
       if (res.ok) {
-        return res.json()
+        return res.json();
       }
-      throw new Error(res.statusText)
+      throw new Error(res.statusText);
     })
     .then(res => {
-      if (info === "parks"){
-        renderSection(res);
-      } else if (info === "alerts") {
-        console.log(res);
-      }
+      renderSection(res);
     })
     .catch(err => console.log(err));
 }
 
-
-
+// async request for park latlng
 async function getLatLng(name) {
   const api = 'AIzaSyCBAsHTwIuM21X08GF99aMvf7y0kuiOZ90';
   const baseUrl = 'https://maps.googleapis.com/maps/api/geocode/json';
 
   const params = {
-    key: api
-  }
-  const url = baseUrl + "?" + generateParams(params)
+    key: api,
+    address: name
+  };
+  const url = baseUrl + "?" + generateParams(params);
 
-  let response = await fetch(url + "&address=" + name);
+  let response = await fetch(url);
   let json = await response.json();
 
-  const loc = json.results[0].geometry.location
-
-  initMap(loc)
-  $('#map').removeClass('hidden')
+  const loc = json.results[0].geometry.location;
+  
+  initMap(loc);
 }
 
+// new ggl map
 function initMap(location) {
   const map = new google.maps.Map(document.getElementById('map'), {
     center: location,
-    zoom: 10,
+    zoom: 6,
     disableDefaultUI: true
   });
 
@@ -128,91 +113,32 @@ function initMap(location) {
 }
 
 
-$('#hide-form').change(function () {
-  $('header').toggleClass('collapse-form')
-})
-
+// watch form submit, quick-search btns
 $('form').on('submit', event => {
   event.preventDefault();
-  
-  $('#results').removeClass('hidden').removeClass('collapse')
-  $('#parks-list').empty();
-  clearSections();
 
-  const args = {}
-  let keyword = $('#search-park')
-  let maxResults = $('#max-results')
+  const args = {};
+  let keyword = $('#search-park');
 
-  if (keyword.val()) args.q = keyword.val()
-  if (maxResults.val()) args.limit = maxResults.val()
-  callNps(args, "parks")
+  if (keyword.val()) args.q = keyword.val();
+  callNps(args, "parks");
 })
 
-$('.wrapper-switch-1').on('click', function() {
-  $(this).closest('.wrapper').toggleClass('collapse')
+$('#slideshow').on('click', e => {
+  console.log(e);
+  callNps({parkCode: e.target.id}, 'parks');
 })
-// !CORS
-// async function getWeather (coordinates) {
-//   // accuweather
-//   // 1 get location code to request weather info
-//   // 2 get weather by location code
-//   const codeUrl = "http://dataservice.accuweather.com/locations/v1/cities/geoposition/search"
-//   const api = "Zg63fNEFPoFyNtWNrygJYBCTbaGwbAdr";
-//   const weatherUrl = "http://dataservice.accuweather.com/forecasts/v1/daily/5day/"
-//   const latlng = Object.values(coordinates).join(",")
 
-//   const url = `${codeUrl}?apikey=${api}&q=${latlng}`
-//   const url2 = `${weatherUrl}?apikey=${api}`
+// slideshow
 
-//   let res = await fetch(url);
-//   let json = await res.json();
-//   console.log(json);
+$("#slideshow > img:gt(0)").hide();
 
-//   let res2 = await fetch(url2 + json.Key)
-//   let json2 = await res2.json();
-
-//   console.log(json2);
-
-
-// }
-
-// async function getReviews (name) {
-//   const api = 'AIzaSyCBAsHTwIuM21X08GF99aMvf7y0kuiOZ90';
-//   const baseUrl = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?";
-//   const params = {
-//     key: api,
-//     input: name,
-//     inputtype: 'textquery'
-//   }
-
-//   let res = await fetch(baseUrl+generateParams(params), {dataType: 'jsonp'});
-//   let json = await res.json();
-
-//   const baseUrl2 = 'https://maps.googleapis.com/maps/api/place/details/json?';
-//   const params2 = {
-//     key: api,
-//     fields: 'reviews',
-//     placeid: json.candidates[0].place_id
-//   }
-
-//   let res2 = await fetch(baseUrl2+generateParams(params2));
-//   let json2 = await res2.json();
-
-//   console.log(json2);
-  
-// }
-
-// $('input[type="radio"]').on('change', function () {
-
-//   if (this.value === "q") {
-//     $('#search-state').addClass('hidden')
-//     $('#search-park').removeClass('hidden')
-
-//   } else if (this.value === "state") {
-//     $('#search-park').addClass('hidden')
-//     $('#search-state').removeClass('hidden')
-
-//   }
-// })
-
-
+setInterval(function() {
+  $('#slideshow > img:first')
+    .fadeOut(1000)
+    .next()
+    .fadeIn(1000)
+    .end()
+    .appendTo('#slideshow');
+  $('#app-description > label').html($('#slideshow > img:first').attr('alt'))
+}, 5000);

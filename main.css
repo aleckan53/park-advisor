@@ -4,87 +4,103 @@
   padding: 0;
 }
 
-.padding-5-10 {
-  padding: 5% 10%;
+footer a {
+  color: white;
+  text-decoration: none;
 }
 
-.padding-0-10 {
-  padding: 0 10%;
-}
-
-html {
-  font-family: 'Titillium Web', sans-serif;
+:root {
   position: relative;
   min-height: 100%;
 }
 
 body {
-  min-width: 440px;
+  min-width: 320px;
   line-height: 1.5;
+  font-family: 'Titillium Web', sans-serif;
+  font-size: 1em;
+  padding-bottom: 50px;
 }
 
-.error-message {
+p>span{
+  color: gray;
+}
+ul {
+  list-style: none;
+}
+
+#app-description {
+  padding-bottom: 1rem;
+  text-align: justify;
+}
+
+.error {
   color: red;
+  font-size: 1.5rem;
+  display: block;
+  text-align: justify;
 }
 
 .hidden {
   display: none;
 }
 
-ul {
-  list-style: none;
-}
-
-.red {
-  background-color: red;
-}
-
 .logo {
   color: white;
-  font-size: 1.5rem;
+  font-size: 1.2em;
+  background: url(assets/logo.png) no-repeat right;
+  background-size: 40px 40px
+}
+
+.logo img {
+  width: 40px;
+  padding-top: 5px;
 }
 
 h1 {
-  font-size: 1.5rem;
-  text-align: center;
+  font-size: 1.5em;
+  margin: 0;
 }
 
-nav {
+h3 {
+  margin-bottom: 1rem;
+}
+
+#app-description h1 {
+  margin-bottom: 16px;
+}
+
+header {
   background-color: #239d60;
-  display: flex;
-  justify-content: space-between;
-  padding: 15px 10%;
-  align-items: center;
+  padding: 10px;
 }
 
-nav li {
-  margin-left: 30px;
-}
-
-form input, button {
+form input,
+form button,
+#parks-list button {
   width: 100%;
   display: block;
-  margin: 0 auto;
-  margin-bottom: 1rem;
-  font-size: 1rem;
-  padding: 0.4rem;
-  border: 1px solid rgba(43, 156, 98, 0.3);
+  font-size: 1em;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  height: 2rem;
+  margin: 1rem 0;
 }
 
 form button {
-  display: block;
   background-color: rgba(19, 125, 182, 0.9);
   color: white;
 }
 
 form input::placeholder {
   color: gray;
-  padding-left: 5px;
+}
+
+form input[type="text"] {
+  padding: 0 10px;
 }
 
 form label {
-  display: block;
-  margin-bottom: 1rem;
+  padding-top: 1rem;
 }
 
 fieldset {
@@ -92,63 +108,26 @@ fieldset {
   border: none;
 }
 
-li button {
-  
-}
-
-.carousel {
-  position: relative;
+#carousel {
+  display: flex;
+  align-items: center;
   width: 100%;
-  height: 300px;
   overflow: hidden;
-
+  height: 50vw;
+  max-height: 50vh;
+  position: relative;
 }
 
-.carousel img {
-  position: absolute;
-  max-width: 110%;
-  min-height: 100%;
-  transform: translate(-50%, -50%);
-  top: 50%;
-  left: 50%;
-
+#carousel img {
+  min-width: 110%;
+  max-width: 115%;
 }
-
-.disabled {
-  position: fixed;
-  right: -20%;
-  z-index: -1;
-  visibility: hidden;
+/* 
+#carousel {
+  background: url(assets/loading.gif) no-repeat center;
 }
-
-.indicators{
-  font-family: 'Times New Roman', Times, serif;
-  width: 100%;
-  text-align: center;
-}
-
-.indicators li {
-  display: inline-block;
-  font-size: 3rem;
-  opacity: 0.9;
-  font-family: 'Times New Roman', Times, serif'
-}
-
-.enabled-dot {
-  color: white;
-}
-
-.indicators {
-  display: block;
-  position: absolute;
-  z-index: 100;
-  left: 50%;
-  -webkit-transform: translateX(-50%);
-  transform: translateX(-50%);
-  bottom: 0;
-}
-
-.carousel button {
+ */
+ #carousel button {
   background-color: rgba(0, 0, 0, 0);
   color: rgba(255, 255, 255, 0.5);
   position: absolute;
@@ -159,20 +138,62 @@ li button {
   outline: none;
 }
 
-.carousel button:hover {
-  background-color: rgba(0, 0, 0, 0.5);
-  color: rgba(255, 255, 255, 1);
+#carousel button:focus {
+  border: none;
 }
 
-.carousel button:focus {
-  border: none;
+#next:hover, 
+#prev:hover {
+  background: none;
+  color: rgba(255, 255, 255, 1);
 }
 
 #next {
   right: 0;
 }
 
-#parks-list {}
+.disabled {
+  position: fixed;
+  right: -20%;
+  z-index: -1;
+  visibility: hidden;
+}
+
+.indicators {
+  font-family: 'Times New Roman', Times, serif;
+  width: 100%;
+  text-align: center;
+  user-select: none;
+  display: block;
+  position: absolute;
+  z-index: 100;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+  bottom: 0;
+}
+
+.indicators li {
+  display: inline-block;
+  font-size: 3em;
+  opacity: 0.9;
+}
+
+.enabled-dot {
+  color: white;
+}
+
+#quick-links button:hover, 
+#results button:hover {
+  transition: 0.3s ease;
+  transform: scale(1.1,1.1)
+}
+
+#quick-links button, 
+#results button {
+  transition: 0.3s ease;
+  border: none;
+}
 
 #parks-list img {
   width: 100%;
@@ -180,14 +201,6 @@ li button {
 
 #map {
   height: 400px;
-  width: 80%;
-  margin: 1rem auto 0;
-}
-
-.collapse-form {
-  height: 0px;
-  overflow: hidden;
-  padding: 0;
 }
 
 .collapse {
@@ -196,12 +209,7 @@ li button {
   padding: 0;
 }
 
-.wrapper {
-  /* margin-bottom: 5px;
-  box-shadow: 0 2px 5px gray; */
-}
-
-.wrapper-top {
+.section-head {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -209,15 +217,6 @@ li button {
   width: 100%;
   height: 50px;
   background-color: #007cb9;
-}
-
-#more-section button {
-  display: block;
-  width: 100%;
-  padding: 10px;
-  background-color: #007cb9;
-  text-align: left;
-  color: white;
 }
 
 footer {
@@ -234,18 +233,28 @@ footer {
   align-items: center;
 }
 
-main {
-  margin-bottom: 50px;
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 1rem;
 }
 
 table td {
-  border: 1px solid black;
+  border: 1px solid #ddd;
   padding: 5px 10px;
 }
 
-table {
-  border-collapse: collapse;
-  margin: 5% 10%;
+thead td {
+  background-color: rgba(43, 156, 98, 0.2);
+  font-weight: 600;
+}
+
+tbody tr:nth-child(1n) {
+  background-color: rgba(19, 125, 182, 0.04)
+}
+
+tbody tr:nth-child(2n) {
+  background-color: rgba(19, 125, 182, 0.08)
 }
 
 td:nth-child(3) {
@@ -254,85 +263,297 @@ td:nth-child(3) {
 
 #weather-section img {
   display: block;
-  margin: 0 auto;
-  width: 200px;
+  margin: 16px auto 20px;
+  width: 150px;
 }
 
-.check {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
+input[type=checkbox] {
+  position: absolute;
+  width: 60px;
+  height: 30px;
+  -webkit-appearance: none;
 }
 
-input[type=checkbox]{
-	height: 0;
-	width: 0;
-  visibility: hidden;
-
-}
-
-input[type="checkbox"]:checked + label:after {
-  left: calc(100% - 5px);
+input[type="checkbox"]:checked+label:after {
+  right: calc(100% - 45px);
   transform: translateX(-100%);
 }
 
-.check label {
+.switch label {
   cursor: pointer;
-  
   width: 60px;
   height: 30px;
-  background: rgba(245,245,245,0.2);
+  background: rgba(245, 245, 245, 0.2);
   display: block;
   border-radius: 100px;
   position: relative;
 }
 
-.check label:after {
+.switch label:after {
   content: '';
-	position: absolute;
-	top: 5px;
-	left: 5px;
-	width: 20px;
-	height: 20px;
-	background: rgba(255,255,255,0.6);
-	border-radius: 90px;
-	transition: 0.3s;
-  
-}
-.check label:active:after {
-	width: 50%;
-}
-
-input:checked + label {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 90px;
   transition: 0.3s;
 }
 
-input:checked +label:after {
-  background: #fff;
-}
-
-input + label {
+input:checked+label {
   transition: 0.3s;
 }
 
+input:checked+label:after {
+  background: rgba(255, 255, 255, 0.6);
+}
 
-.search-params {
+input+label {
+  transition: 0.3s;
+}
+
+label:active {
+  outline: none;
+}
+
+#results .img-container {
+  display: block;
+  width: 100%;
+  height: 30%;
+  max-height: 200px;
+  background: url(assets/loading.gif) no-repeat center;
+  overflow: hidden;
   display: flex;
-  margin: 0 0 1rem;
-  height: 35px;
+  align-items: center;
 }
 
-.search-params select {
-  display: inline-block;
-  width: 15%;
-  padding: 0;
-  margin: 0;
+.section-body,
+header,
+#parks-list {
+  text-align: justify;
+}
+
+header, 
+#quick-search, 
+form, 
+#app-description, 
+#results .section-body,
+.section-head,
+#park-info,
+#map~p,
+#fees-section .section-body,
+#weather-section .section-body,
+.error {
+  padding-left: 10%;
+  padding-right: 10%;
+}
+
+.section-body>* {
+  margin-bottom: 1rem;
+}
+
+#results .section-body {
+  margin-top: 1rem;
+}
+
+#parks-list {
+  margin-block-end: 0;
+}
+
+#parks-list button {
+  border: none;
+  background-color: #007cb9;
+  color: white;
+}
+
+#parks-list {
+  display: flex;
+  flex-direction: column;
+}
+
+#slideshow {
+  width: 100%;
+  height: 50vw;
+  position: relative;
+  overflow: hidden;
+  margin-top: 1em;
+}
+
+
+#slideshow img {
+  position: absolute;
+  height: auto;
+  width: 110%;
+}
+
+#app-description > label {
+  display: block;
+  width: 100%;
+  font-size: 1em;
+  font-weight: 400;
+  text-align: center;
+  height: 2em;
+  padding: 4px;
+  border: none;
+  background-color: rgba(43, 156, 98, 0.2)
+}
+
+@media (min-width: 500px) {
+  #results .img-container {
+    max-height: 300px;
+  }
+}
+
+@media (min-width: 760px) {
+  :root {
+    font-size: 1.1em;
+  }
+  header, 
+  #quick-search, 
+  form, 
+  #app-description, 
+  #results .section-body,
+  .section-head,
+  #park-info,
+  #map~p,
+  #fees-section .section-body,
+  #weather-section .section-body,
+  .error {
+    padding-left: 18%;
+    padding-right: 18%;
+  }
+  .section-body>* {
+    margin-bottom: 2rem;
+  }
+  table {
+    margin-top: 2rem;
+  }
+  #results .section-body {
+    margin-top: 2rem;
+  }
+  #slideshow {
+    height: 40vw;
+  }
+}
+
+@media (min-width: 960px) {
+  :root {
+    font-size: 1.2em;
+  }
+  header, 
+  #quick-search, 
+  form, 
+  #app-description, 
+  #results .section-body,
+  .section-head,
+  #park-info,
+  #map~p,
+  #fees-section .section-body,
+  #weather-section .section-body,
+  .error {
+    padding-left: 20%;
+    padding-right: 20%;
+  }
+  .section-body>* {
+    margin-bottom: 2rem;
+  }
+  table {
+    margin-top: 2rem;
+  }
+  #results .section-body {
+    margin-top: 2rem;
+  }
+  #parks-list button {
+    margin: 2rem 0;
+  }
+  hr {
+    margin-bottom: 2rem;
+  }
+  #parks-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+  #parks-list li {
+    display: flex;
+    flex-direction: column;
+    width: 48%;
+  }
+  #park-list li:nth-child(3) {
+    order: 1;
+  }
+  #parks-list img {
+    height: auto;
+    max-width: 160%;
+    min-width: 100%;
+  }
+  #parks-list h3 {
+    align-self: flex-start;
+  }
+  #results .img-container {
+    max-height: 200px;
+  }
+  fieldset>div {
+    display: flex;
+  }
+  fieldset button {
+    width: 20%;
+  }
+  #quick-search ul {
+    display: flex;
+    justify-content: space-between;
+  }
+  #quick-search button {
+    height: 50px;
+    font-size: 0.8em;
+  }
+  #quick-search li {
+    width: 100%;
+  }
+  #quick-links>div {
+    width: 45%
+  }
+  #slideshow {
+    height: 35vw;
+  }
+}
+
+@media (min-width: 1200px) {
+  :root {
+    font-size: 1.3em;
+  }
+  #carousel {
+    max-height: 60vh;
+  }
+  header, 
+  #quick-search, 
+  form, 
+  #app-description, 
+  #results .section-body,
+  .section-head,
+  #park-info,
+  #map~p,
+  #fees-section .section-body,
+  #weather-section .section-body,
+  .error {
+    padding-left: 25%;
+    padding-right: 25%;
+  }
+  #slideshow {
+    height: 25vw;
+  }
+
 
 }
 
-.search-params input {
-  display: inline-block;
-  padding: 0;
-  margin: 0;
+@media (min-width: 1600px) {
+  :root {
+    font-size: 1.4em;
+  }
+  #results .img-container {
+    max-height: 300px;
+  }
 }
 
