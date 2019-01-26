@@ -45,17 +45,15 @@ ul {
   display: none;
 }
 
+
 .logo {
   color: white;
-  font-size: 1.2em;
   background: url(assets/logo.png) no-repeat right;
-  background-size: 40px 40px
+  background-size: 40px 40px;
+  user-select: none;
+  cursor: pointer;
 }
 
-.logo img {
-  width: 40px;
-  padding-top: 5px;
-}
 
 h1 {
   font-size: 1.5em;
@@ -98,6 +96,11 @@ form input::placeholder {
 form input[type="text"] {
   padding: 0 10px;
 }
+
+form button[type="submit"] {
+  cursor: pointer;
+}
+
 
 form label {
   padding-top: 1rem;
