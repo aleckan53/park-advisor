@@ -284,9 +284,26 @@ input[type="checkbox"]:checked+label:after {
   height: 30px;
   background: rgba(245, 245, 245, 0.2);
   display: block;
+  -webkit-border-radius: 100px;
+  -moz-border-radius: 100px;
   border-radius: 100px;
   position: relative;
+  user-select: none;
+  outline: none;
+
 }
+
+.switch input {
+  user-select: none;
+  outline: none;
+
+}
+
+.switch {
+  user-select: none;
+  outline: none;
+}
+
 
 .switch label:after {
   content: '';
