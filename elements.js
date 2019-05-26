@@ -22,7 +22,6 @@ function genHtml(img, park) {
   );
 
   $('main').append(html);
-  console.log(html.join());
   
   carouselControls(img.length);
 }
@@ -118,12 +117,13 @@ function genFeesInfo(park) {
   }
 
   park.entranceFees.forEach(fee => {
+    console.log(fee.cost.split('.')[0])
     html.push(`
-            <tr>
-              <td>${fee.title}</td>
-              <td>${fee.description}</td>
-              <td>$${fee.cost}</td>
-            </tr>
+      <tr>
+        <td>${fee.title}</td>
+        <td>${fee.description}</td>
+        <td>$${fee.cost.split('.')[0]}</td>
+      </tr>
     `);
   });
 

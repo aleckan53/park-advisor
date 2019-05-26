@@ -271,6 +271,8 @@ input[type=checkbox] {
   width: 60px;
   height: 30px;
   -webkit-appearance: none;
+  background: none;
+  border: none;
 }
 
 input[type="checkbox"]:checked+label:after {
